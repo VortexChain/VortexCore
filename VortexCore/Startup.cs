@@ -24,6 +24,7 @@ using VortexCore.ModelsDB.MongoDB;
 using VortexCore.Services.Authentication;
 using VortexCore.Services.MongoDB;
 using VortexCore.Services.Hubs;
+using VortexCore.ModelsDB.VortexDB;
 
 namespace VortexCore
 {
@@ -41,7 +42,7 @@ namespace VortexCore
         {
             services.AddOptions();
 
-            services.AddDbContext<VortexBDContext>(options =>
+            services.AddDbContext<VortexDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.Configure<ChatDatabaseSettings>(options =>

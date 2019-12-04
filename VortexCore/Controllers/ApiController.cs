@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VortexCore.Services;
 using VortexCore.ManagersDB;
-using VortexCore.ModelsDB;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using VortexCore.Services.MongoDB;
+using VortexCore.ModelsDB.VortexDB;
+using System.Diagnostics;
 
 namespace VortexCore.Controllers
 {
@@ -21,7 +22,7 @@ namespace VortexCore.Controllers
     {
         private VortexManager ManagerDB { get; set; }
         private readonly ChatService ChatManager;
-        public ApiController(VortexBDContext context, ChatService chatService)
+        public ApiController(VortexDBContext context, ChatService chatService)
         {
             ManagerDB = new VortexManager(context);
             ChatManager = chatService;
@@ -40,25 +41,6 @@ namespace VortexCore.Controllers
         {
             var isSuccess = ManagerDB.AddNotificationToken(token);
             return isSuccess ? new OkResult() : StatusCode(500);
-        }
-
-        public ActionResult SetUserNotificationToken(int id, string token)
-        {
-            var isSuccess = ManagerDB.SetNotificationToken(id, token);
-            return isSuccess ? new OkResult() : StatusCode(500);
-        }
-
-        public ActionResult GetUserNotificationToken(int id)
-        {
-            var token = ManagerDB.GetNotificationToken(id);
-            if(token != null)
-            {
-                return new JsonResult(token);
-            }
-            else
-            {
-                return new NotFoundObjectResult(token);
-            }
         }
 
         [Authorize]
@@ -81,5 +63,13 @@ namespace VortexCore.Controllers
             var res = ChatManager.GetMessages();
             return new JsonResult(res);
         }
+
+        [Authorize]
+        public ActionResult GetSshConnections()
+        {
+            var res = ManagerDB.GetSshUsers(User.Claims.FirstOrDefault(x => x.Type == "user_id").Value);
+            return new JsonResult(res);
+        }
+
     }
 }
