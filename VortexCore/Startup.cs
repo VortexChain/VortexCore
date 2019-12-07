@@ -47,7 +47,6 @@ namespace VortexCore
 
             services.Configure<ChatDatabaseSettings>(options =>
             {
-                options.ChatCollectionName = "VortexChat";
                 options.ConnectionString = "mongodb://localhost:27017";
                 options.DatabaseName = "VortexDB";
             });

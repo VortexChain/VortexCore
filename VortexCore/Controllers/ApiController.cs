@@ -71,5 +71,15 @@ namespace VortexCore.Controllers
             return new JsonResult(res);
         }
 
+        public ActionResult GetSshServers()
+        {
+            return new JsonResult(ManagerDB.GetSshServers());
+        }
+
+        public ActionResult UsernameAvaible(string username, int serverId)
+        {
+            return new JsonResult(ManagerDB.UsernameAvaible(username, serverId));
+        }
+
     }
 }

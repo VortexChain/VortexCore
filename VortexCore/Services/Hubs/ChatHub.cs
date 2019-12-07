@@ -10,6 +10,7 @@ using MongoDB.Bson;
 using System.Security.Claims;
 using VortexCore.DtoClasses;
 using System.Collections.ObjectModel;
+using FirebaseAdmin.Auth;
 
 namespace VortexCore.Services.Hubs
 {
@@ -17,11 +18,13 @@ namespace VortexCore.Services.Hubs
     public class ChatHub : Hub
     {
         private readonly ChatService _chatService;
-        private readonly static Dictionary<string ,User> clients = new Dictionary<string, User>();
+        private readonly static Dictionary<string, User> clients = new Dictionary<string, User>();
+        private static List<User> users;
 
         public ChatHub(ChatService chatService)
         {
             _chatService = chatService;
+            users = _chatService.GetChatUsers(0).Select(user => user.User).ToList();
         }
 
 
@@ -29,10 +32,12 @@ namespace VortexCore.Services.Hubs
         {
             var allMessges = _chatService.GetMessages();
             var user = await User.GetUser(Context.User);
+            _chatService.AttachUserToChat(0, user);
             clients.Add(Context.ConnectionId, user);
             await Clients.Caller.SendAsync("ChatReady", new {
                 messages = allMessges,
-                clients = clients.Values
+                clients = clients.Values,
+                users = users
             });
             await Clients.Others.SendAsync("UserJoin", user);
             

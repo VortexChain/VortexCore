@@ -37,6 +37,7 @@ namespace VortexCore.Controllers
 
         public ActionResult CanCreateUser(string username, int serverId)
         {
+            
             if (!ManagerDB.UsernameAvaible(username, serverId)) return StatusCode(403);
             var sshServer = ManagerDB.GetSshServer(serverId);
             if(sshServer == null) return StatusCode(405);
