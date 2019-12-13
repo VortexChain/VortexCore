@@ -37,10 +37,9 @@ namespace VortexCore.Controllers
 
         public ActionResult CanCreateUser(string username, int serverId)
         {
-            
-            if (!ManagerDB.UsernameAvaible(username, serverId)) return StatusCode(403);
+            if (!ManagerDB.UsernameAvaible(username, serverId)) return BadRequest("Username unavailable");
             var sshServer = ManagerDB.GetSshServer(serverId);
-            if(sshServer == null) return StatusCode(405);
+            if(sshServer == null) return BadRequest("Such a server does not exist");
             var connectionString = $"root@{sshServer.Host}";
             var port = sshServer.Port == 22 ? "" : $"-p {sshServer.Port}";
             return new JsonResult(connectionString + port);
@@ -48,7 +47,7 @@ namespace VortexCore.Controllers
 
         public ActionResult AddSshUser(string uid, string username, int serverId)
         {
-            if (!ManagerDB.UsernameAvaible(username, serverId)) return new StatusCodeResult(405);
+            if (!ManagerDB.UsernameAvaible(username, serverId)) return BadRequest("Username unavailable");
             var sshUser = new SshUser
             {
                 ServerId = serverId,

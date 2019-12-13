@@ -81,5 +81,10 @@ namespace VortexCore.Controllers
             return new JsonResult(ManagerDB.UsernameAvaible(username, serverId));
         }
 
+        public ActionResult BrokenMethod()
+        {
+            return BadRequest("Fuck it");
+        }
+
     }
 }
