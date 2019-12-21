@@ -31,7 +31,7 @@ namespace VortexCore.Services
         {
             FirebaseApp = FirebaseApp.Create(new AppOptions()
             {
-                Credential = GoogleCredential.FromFile("FireBaseCredential.json"),
+                Credential = GoogleCredential.FromFile("FirebaseCredential.json"),
             });
             Messaging = FirebaseMessaging.GetMessaging(FirebaseApp);
         }
