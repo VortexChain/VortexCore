@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace VortexCore.Controllers
 {
-    
+
     [Route("[controller]/[action]")]
     [ApiController]
     public class ApiController : ControllerBase
